@@ -36,12 +36,16 @@ public class Menu {
 				case 2:
 					updateInformation();
 				break;
+				
+				case 3:
+					updateStatus();
+				break;
 			}
 		} while(option!=0);
 	}
 	
 	public String textManagement(){
-		String msg = "Management\n1. Add information\n0. End the program";
+		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n0. End the program";
 		return msg;
 	}
 	
@@ -129,6 +133,20 @@ public class Menu {
 	public String textUpdateInformation() {
 		String msg = "\nSelect an option\n1. Update restaurant\n2. Update product\n3. Update customer\n4. Update order\n0. Back to menu";
 		return msg;
+	}
+	
+	public void updateStatus() throws IOException {
+		String orderCode = existsThisObject(management.getOrders(), "Type the code of the order to update", "order, please try again");
+		while(true) {
+			try {
+				int status = selectOption("\nSelect the new status\n1. Requested\n2. In process\n3. Sent\n4. Delivered", 1, 4);
+				String msg = management.updateStatus(orderCode, status);
+				System.out.print(msg);
+				return;
+			} catch(InvalidOption e){
+				System.out.print(e.getMessage());
+			}
+		}
 	}
 	
 	public void addRestaurant() throws IOException {

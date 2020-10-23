@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.*;
 import java.util.ArrayList;
 
 public class Management {
@@ -86,7 +87,7 @@ public class Management {
 	
 	public String updateCustomer(String idType, String id, String name, String lastName, String phone, String address) {
 		String msg = "\nThe customer was successfully update\n";
-		int position = searchObject(id, products);
+		int position = searchObject(id, customers);
 		customers.remove(position);
 		Customer test = new Customer(idType, id, name, lastName, phone, address);
 		position = positionToAddCustomer(test);
@@ -104,7 +105,7 @@ public class Management {
 	
 	public String updateOrder(String code, String idCustomer, String nitRestaurant, ArrayList<String> products, ArrayList<Integer> quantitys) {
 		String msg = "\nThe order was successfully update\n";
-		int position = searchObject(code, products);
+		int position = searchObject(code, orders);
 		Order test = orders.get(position);
 		test.setIdCustomer(idCustomer);
 		test.setNitRestaurant(nitRestaurant);
@@ -123,6 +124,17 @@ public class Management {
 			}
 		}
 		return position;
+	}
+	
+	public String updateStatus(String code, int newStatus) throws InvalidOption {
+		int position = searchObject(code, orders);
+		int orderStatus = orders.get(position).getStatus();
+		if(newStatus<orderStatus) {
+			throw new InvalidOption();
+		} else{
+			orders.get(position).setStatus(newStatus);
+			return "\nThe order status has been update succesfully";
+		}
 	}
 
 	public ArrayList<Restaurant> getRestaurants() {

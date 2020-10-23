@@ -5,12 +5,18 @@ import java.util.Date;
 
 public class Order {
 	
+	public static int REQUESTED = 1;
+	public static int INPROCESS = 2;
+	public static int SENT = 3;
+	public static int DELIVERED = 4;
+	
 	private String code;
 	private Date date;
 	private String idCustomer;
 	private String nitRestaurant;
 	private ArrayList<String> products;
 	private ArrayList<Integer> quantitys;
+	private int status;
 	
 	public Order(String code, String idCustomer, String nitRestaurant, ArrayList<String> products, ArrayList<Integer> quantitys) {
 		this.code = generateCode(code);
@@ -19,10 +25,11 @@ public class Order {
 		this.nitRestaurant = nitRestaurant;
 		this.products = products;
 		this.quantitys = quantitys;
+		status = REQUESTED;
 	}
 	
 	public String generateCode(String code) {
-		int ncode = Integer.parseInt(code);;
+		int ncode = Integer.parseInt(code);
 		ncode = ncode+1;
 		code = ncode+"";
 		return code;
@@ -78,5 +85,13 @@ public class Order {
 
 	public void setQuantitys(ArrayList<Integer> quantitys) {
 		this.quantitys = quantitys;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }
