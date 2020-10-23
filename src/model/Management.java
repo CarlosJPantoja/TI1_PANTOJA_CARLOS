@@ -1,5 +1,5 @@
 package model;
- 
+
 import exceptions.*;
 import java.util.ArrayList;
 
@@ -71,7 +71,7 @@ public class Management {
 		return msg;
 	}
 	
-	public String addCustomer(String idType, String id, String name, String lastName, String phone, String address) {
+	public String addCustomer(String idType, String id, String name, String lastName, int phone, String address) {
 		String msg = "";
 		int position = searchObject(id, customers);
 		if(position==-1) {
@@ -85,7 +85,7 @@ public class Management {
 		return msg;
 	}
 	
-	public String updateCustomer(String idType, String id, String name, String lastName, String phone, String address) {
+	public String updateCustomer(String idType, String id, String name, String lastName, int phone, String address) {
 		String msg = "\nThe customer was successfully update\n";
 		int position = searchObject(id, customers);
 		customers.remove(position);
@@ -131,10 +131,73 @@ public class Management {
 		int orderStatus = orders.get(position).getStatus();
 		if(newStatus<orderStatus) {
 			throw new InvalidOption();
+		} else if(orderStatus==4) {
+			return "\nThe order status is delivered, it cannot be modified";
+		} else if(orderStatus==newStatus) {
+			return "\nThe chosen status is already assigned to the order";
 		} else{
 			orders.get(position).setStatus(newStatus);
 			return "\nThe order status has been update succesfully";
 		}
+	}
+	
+	public String listRestaurants() {
+		String msg = "";
+		for(int i=0; i<restaurants.size(); ) {
+			Restaurant test = restaurants.get(i);
+			restaurants.remove(i);
+			int position = positionToListRestaurant(test);
+			restaurants.add(position, test);
+			if(position<=i) {
+				i++;
+			}
+		}
+		for(int i=0; i<restaurants.size(); i++) {
+			msg += "\n"+restaurants.get(i).getName().trim();
+		}
+		return msg;
+	}
+	
+	public int positionToListRestaurant(Restaurant test) {
+		int position = 0;
+		String complete1 = test.getName().trim();
+		for(int i=0; i<restaurants.size(); i++) {
+			String complete2 = restaurants.get(i).getName().trim();
+			if(complete1.compareToIgnoreCase(complete2) > 0) {
+				position++;
+			}
+		}
+		return position;
+	}
+	
+	public String listCustomers() {
+		String msg = "";
+		ArrayList<Customer> newCustomers = customers;
+		for(int i=0; i<newCustomers.size(); ) {
+			Customer test = newCustomers.get(i);
+			newCustomers.remove(i);
+			int position = positionToListCustomer(test, newCustomers);
+			newCustomers.add(position, test);
+			if(position<=i) {
+				i++;
+			}
+		}
+		for(int i=0; i<newCustomers.size(); i++) {
+			msg += "\n"+newCustomers.get(i).getName().trim();
+		}
+		return msg;
+	}
+	
+	public int positionToListCustomer(Customer test, ArrayList<Customer> newCustomers) {
+		int position = 0;
+		Integer complete1 = test.getPhone();
+		for(int i=0; i<newCustomers.size(); i++) {
+			Integer complete2 = newCustomers.get(i).getPhone();
+			if(complete1.compareTo(complete2) < 0) {
+				position++;
+			}
+		}
+		return position;
 	}
 
 	public ArrayList<Restaurant> getRestaurants() {

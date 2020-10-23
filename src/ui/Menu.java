@@ -1,5 +1,5 @@
 package ui;
- 
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -23,33 +23,37 @@ public class Menu {
 
 	public void showMenu() throws IOException{
 		int option = -1;
-		option = selectOption(textManagement(), 0, 1); 
+		option = selectOption(textManagement(), 0, 4); 
 		do {
 			if(option==-1) {
-				option = selectOption("\n"+textManagement(), 0, 2); 
+				option = selectOption("\n"+textManagement(), 0, 4); 
 			}
 			switch(option) {
 				case 1:
-					addInformation();
+					option = addInformation();
 				break;
 				
 				case 2:
-					updateInformation();
+					option = updateInformation();
 				break;
 				
 				case 3:
-					updateStatus();
+					option = updateStatus();
+				break;
+				
+				case 4:
+					option = listOnScreen();
 				break;
 			}
 		} while(option!=0);
 	}
 	
 	public String textManagement(){
-		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n0. End the program";
+		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n4. List on screen\n0. End the program";
 		return msg;
 	}
 	
-	public void addInformation() throws IOException {
+	public int addInformation() throws IOException {
 		int option = -1;
 		do {
 			option = selectOption(textAddInformation(), 0, 4);
@@ -81,7 +85,7 @@ public class Menu {
 				break;
 			}
 		} while(option!=0);
-		option = -1;
+		return -1;
 	}
 	
 	public String textAddInformation() {
@@ -89,7 +93,7 @@ public class Menu {
 		return msg;
 	}
 	
-	public void updateInformation() throws IOException {
+	public int updateInformation() throws IOException {
 		int option = -1;
 		do {
 			option = selectOption(textUpdateInformation(), 0, 4);
@@ -127,7 +131,7 @@ public class Menu {
 				break;
 			}
 		} while(option!=0);
-		option = -1;
+		return -1;
 	}
 	
 	public String textUpdateInformation() {
@@ -135,16 +139,48 @@ public class Menu {
 		return msg;
 	}
 	
-	public void updateStatus() throws IOException {
+	public int listOnScreen() throws IOException {
+		int option = -1;
+		do {
+			option = selectOption(textListOnScreen(), 0, 2);
+			switch(option) {
+				case 1:
+					if(management.getRestaurants().size()>0) {
+						String msg = management.listRestaurants();
+						System.out.print(msg+"\n");
+					} else {
+						System.out.print("\nNo restaurants has been added, without one, you cannot list information\n");
+					}
+				break;
+
+				case 2:
+					if(management.getCustomers().size()>0) {
+						String msg = management.listCustomers();
+						System.out.print(msg+"\n");
+					} else {
+						System.out.print("\nNo customers has been added, without one, you cannot list information\n");
+					}
+				break;
+			}
+		} while(option!=0);
+		return -1;
+	}
+	
+	public String textListOnScreen() {
+		String msg = "\nSelect an option\n1. List restaurants in ascending alphabetical order\n2. List customers in order of their descending phone number\n0. Back to menu";
+		return msg;
+	}
+	
+	public int updateStatus() throws IOException {
 		String orderCode = existsThisObject(management.getOrders(), "Type the code of the order to update", "order, please try again");
 		while(true) {
 			try {
 				int status = selectOption("\nSelect the new status\n1. Requested\n2. In process\n3. Sent\n4. Delivered", 1, 4);
 				String msg = management.updateStatus(orderCode, status);
 				System.out.print(msg);
-				return;
+				return -1;
 			} catch(InvalidOption e){
-				System.out.print(e.getMessage());
+				System.out.print("\nThe order status cannot be downgraded, please try again\n");
 			}
 		}
 	}
@@ -189,7 +225,7 @@ public class Menu {
 		String id = typeString("Type the id of the customer");
 		String name = typeString("Type the name of the customer");
 		String lastName = typeString("Type the last name of the customer");
-		String phone = typeString("Type the phone of the customer");
+		int phone = typeInt("Type the phone of the customer");
 		String address = typeString("Type the address of the customer");
 		String msg = management.addCustomer(idType, id, name, lastName, phone, address);
 		System.out.print(msg);
@@ -200,7 +236,7 @@ public class Menu {
 		String idType = typeString("\nType the new id type of the customer");
 		String name = typeString("Type the new name of the customer");
 		String lastName = typeString("Type the new last name of the customer");
-		String phone = typeString("Type the new phone of the customer");
+		int phone = typeInt("Type the new phone of the customer");
 		String address = typeString("Type the new address of the customer");
 		String msg = management.updateCustomer(idType, id, name, lastName, phone, address);
 		System.out.print(msg);
