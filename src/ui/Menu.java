@@ -23,10 +23,10 @@ public class Menu {
 
 	public void showMenu() throws IOException{
 		int option = -1;
-		option = selectOption(textManagement(), 0, 4); 
+		option = selectOption(textManagement(), 0, 5); 
 		do {
 			if(option==-1) {
-				option = selectOption("\n"+textManagement(), 0, 4); 
+				option = selectOption("\n"+textManagement(), 0, 5); 
 			}
 			switch(option) {
 				case 1:
@@ -43,6 +43,10 @@ public class Menu {
 				
 				case 4:
 					option = listOnScreen();
+				break;
+				
+				case 5:
+					option = searchCustomer();
 				break;
 			}
 		} while(option!=0);
@@ -183,6 +187,14 @@ public class Menu {
 				System.out.print("\nThe order status cannot be downgraded, please try again\n");
 			}
 		}
+	}
+	
+	public int searchCustomer() throws IOException {
+		String name = typeString("\nType the name of the customer to search").trim();
+		String lastName = typeString("Type the last name of the customer to search").trim();
+		String msg = management.searchCustomer(lastName+" "+name);
+		System.out.print(msg);
+		return -1;
 	}
 	
 	public void addRestaurant() throws IOException {

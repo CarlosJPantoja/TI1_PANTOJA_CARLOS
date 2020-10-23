@@ -199,6 +199,30 @@ public class Management {
 		}
 		return position;
 	}
+	
+	public String searchCustomer(String name) {
+		String msg = "";
+		long time = System.currentTimeMillis();
+		boolean found = false;
+		int mid = 0;
+		for(int i=0, j=customers.size()-1; i<=j && !found;){
+			mid = (i+j)/2;
+			if(customers.get(mid).getAllName().equals(name)){
+				found=true;
+			}else if(customers.get(mid).getAllName().compareToIgnoreCase(name)<0){
+				j=mid-1;
+			}else if(customers.get(mid).getAllName().compareToIgnoreCase(name)>0){
+				i=mid+1;
+			}
+		}
+		time = System.currentTimeMillis()-time;
+		if(found) {
+			msg += "\nCustomer "+name+" identified with"+customers.get(mid).getIdType()+" "+customers.get(mid).getId()+" was found in "+time+" milliseconds\n";
+		} else {
+			msg += "\nCustomer "+name+" was not found, the list was traversed in "+time+" milliseconds\n";
+		}
+		return msg;
+	}
 
 	public ArrayList<Restaurant> getRestaurants() {
 		return restaurants;
