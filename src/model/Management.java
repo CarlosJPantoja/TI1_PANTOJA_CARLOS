@@ -1,6 +1,10 @@
 package model;
 
 import exceptions.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Management {
@@ -71,7 +75,7 @@ public class Management {
 		return msg;
 	}
 	
-	public String addCustomer(String idType, String id, String name, String lastName, int phone, String address) {
+	public String addCustomer(String idType, String id, String name, String lastName, Long phone, String address) {
 		String msg = "";
 		int position = searchObject(id, customers);
 		if(position==-1) {
@@ -85,7 +89,7 @@ public class Management {
 		return msg;
 	}
 	
-	public String updateCustomer(String idType, String id, String name, String lastName, int phone, String address) {
+	public String updateCustomer(String idType, String id, String name, String lastName, Long phone, String address) {
 		String msg = "\nThe customer was successfully update\n";
 		int position = searchObject(id, customers);
 		customers.remove(position);
@@ -190,9 +194,9 @@ public class Management {
 	
 	public int positionToListCustomer(Customer test, ArrayList<Customer> newCustomers) {
 		int position = 0;
-		Integer complete1 = test.getPhone();
+		Long complete1 = test.getPhone();
 		for(int i=0; i<newCustomers.size(); i++) {
-			Integer complete2 = newCustomers.get(i).getPhone();
+			Long complete2 = newCustomers.get(i).getPhone();
 			if(complete1.compareTo(complete2) < 0) {
 				position++;
 			}
@@ -222,6 +226,27 @@ public class Management {
 			msg += "\nCustomer "+name+" was not found, the list was traversed in "+time+" milliseconds\n";
 		}
 		return msg;
+	}
+	
+	public String importCustomer(String fileName) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		String[] line = br.readLine().split(";");
+		String ln = "";
+		while(ln!=null) {
+			ln = br.readLine();
+			if(ln!=null) {
+				line = ln.split(";");
+				String name = line[0];
+				String lastName = line[1];
+				String idType = line[2];
+				String id = line[3];
+				Long phone = Long.parseLong(line[4]);
+				String address = line[5];
+				addCustomer(idType, id, name, lastName, phone, address);
+			}
+		}
+		br.close();
+		return "\nData was imported successfully\n";
 	}
 
 	public ArrayList<Restaurant> getRestaurants() {

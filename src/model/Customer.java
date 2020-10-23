@@ -6,10 +6,10 @@ public class Customer {
 	private String id;
 	private String name;
 	private String lastName;
-	private int phone;
+	private Long phone;
 	private String address;
 	
-	public Customer(String idType, String id, String name, String lastName, int phone, String address) {
+	public Customer(String idType, String id, String name, String lastName, Long phone, String address) {
 		this.idType = idType;
 		this.id = id;
 		this.name = name;
@@ -59,11 +59,11 @@ public class Customer {
 		this.lastName = lastName;
 	}
 
-	public int getPhone() {
+	public Long getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(Long phone) {
 		this.phone = phone;
 	}
 

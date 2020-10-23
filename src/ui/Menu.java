@@ -23,10 +23,10 @@ public class Menu {
 
 	public void showMenu() throws IOException{
 		int option = -1;
-		option = selectOption(textManagement(), 0, 5); 
+		option = selectOption(textManagement(), 0, 6); 
 		do {
 			if(option==-1) {
-				option = selectOption("\n"+textManagement(), 0, 5); 
+				option = selectOption("\n"+textManagement(), 0, 6); 
 			}
 			switch(option) {
 				case 1:
@@ -48,12 +48,51 @@ public class Menu {
 				case 5:
 					option = searchCustomer();
 				break;
+				
+				case 6:
+					option = importData();
+				break;
 			}
 		} while(option!=0);
 	}
 	
 	public String textManagement(){
-		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n4. List on screen\n0. End the program";
+		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n4. List on screen\n5. Search customer\n6. Import data (from .csv)\n0. End the program";
+		return msg;
+	}
+	
+	public int importData() throws IOException {
+		int option = -1;
+		do {
+			option = selectOption(textImportData(), 0, 4);
+			String msg = "";
+			if(option!=0) {
+				msg = typeString("\nType the file location to import");
+			}
+			switch(option) {
+				case 1:
+					//importRestaurants();
+				break;
+
+				case 2:
+					//importProducts();
+				break;
+				
+				case 3:
+					msg = management.importCustomer(msg);
+					System.out.println(msg);
+				break;
+				
+				case 4:
+					//importOrders();
+				break;
+			}
+		} while(option!=0);
+		return -1;
+	}
+	
+	public String textImportData(){
+		String msg = "Select an option\n1. Import restaurants\n2. Import producs\n3. Import customers\n4. Import orders\n0. Back to menu";
 		return msg;
 	}
 	
@@ -237,7 +276,7 @@ public class Menu {
 		String id = typeString("Type the id of the customer");
 		String name = typeString("Type the name of the customer");
 		String lastName = typeString("Type the last name of the customer");
-		int phone = typeInt("Type the phone of the customer");
+		Long phone = typeLong("Type the phone of the customer");
 		String address = typeString("Type the address of the customer");
 		String msg = management.addCustomer(idType, id, name, lastName, phone, address);
 		System.out.print(msg);
@@ -248,7 +287,7 @@ public class Menu {
 		String idType = typeString("\nType the new id type of the customer");
 		String name = typeString("Type the new name of the customer");
 		String lastName = typeString("Type the new last name of the customer");
-		int phone = typeInt("Type the new phone of the customer");
+		Long phone = typeLong("Type the new phone of the customer");
 		String address = typeString("Type the new address of the customer");
 		String msg = management.updateCustomer(idType, id, name, lastName, phone, address);
 		System.out.print(msg);
@@ -370,6 +409,18 @@ public class Menu {
 			try {
 				System.out.print(msg+": ");
 				int number = Integer.parseInt(br.readLine());
+				return number;
+			} catch(NumberFormatException e) {
+				System.out.print("\nThe type of data entered is not supported, please try again\n\n");
+			}
+		}
+	}
+	
+	public Long typeLong(String msg) throws IOException {
+		while(true) {
+			try {
+				System.out.print(msg+": ");
+				Long number = Long.parseLong(br.readLine());
 				return number;
 			} catch(NumberFormatException e) {
 				System.out.print("\nThe type of data entered is not supported, please try again\n\n");
