@@ -147,26 +147,24 @@ public class Management {
 	
 	public String listRestaurants() {
 		String msg = "";
-		for(int i=0; i<restaurants.size(); ) {
-			Restaurant test = restaurants.get(i);
-			restaurants.remove(i);
-			int position = positionToListRestaurant(test);
-			restaurants.add(position, test);
-			if(position<=i) {
-				i++;
-			}
+		ArrayList<Restaurant> newRestaurants = new ArrayList<Restaurant>();
+		newRestaurants.add(restaurants.get(0));
+		for(int k=1; k<restaurants.size(); k++) {
+			Restaurant test = restaurants.get(k);
+			int position = positionToListRestaurant(test, newRestaurants);
+			newRestaurants.add(position, test);
 		}
-		for(int i=0; i<restaurants.size(); i++) {
-			msg += "\n"+restaurants.get(i).getName().trim();
+		for(int i=0; i<newRestaurants.size(); i++) {
+			msg += "\n"+newRestaurants.get(i).getName().trim();
 		}
 		return msg;
 	}
 	
-	public int positionToListRestaurant(Restaurant test) {
+	public int positionToListRestaurant(Restaurant test, ArrayList<Restaurant> newRestaurants) {
 		int position = 0;
 		String complete1 = test.getName().trim();
-		for(int i=0; i<restaurants.size(); i++) {
-			String complete2 = restaurants.get(i).getName().trim();
+		for(int i=0; i<newRestaurants.size(); i++) {
+			String complete2 = newRestaurants.get(i).getName().trim();
 			if(complete1.compareToIgnoreCase(complete2) > 0) {
 				position++;
 			}
