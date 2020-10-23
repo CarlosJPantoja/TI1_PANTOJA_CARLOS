@@ -176,18 +176,15 @@ public class Management {
 	
 	public String listCustomers() {
 		String msg = "";
-		ArrayList<Customer> newCustomers = customers;
-		for(int i=0; i<newCustomers.size(); ) {
-			Customer test = newCustomers.get(i);
-			newCustomers.remove(i);
+		ArrayList<Customer> newCustomers = new ArrayList<Customer>();
+		newCustomers.add(customers.get(0));
+		for(int k=1; k<customers.size(); k++) {
+			Customer test = customers.get(k);
 			int position = positionToListCustomer(test, newCustomers);
 			newCustomers.add(position, test);
-			if(position<=i) {
-				i++;
-			}
 		}
 		for(int i=0; i<newCustomers.size(); i++) {
-			msg += "\n"+newCustomers.get(i).getName().trim();
+			msg += "\n"+newCustomers.get(i).getAllName();
 		}
 		return msg;
 	}
