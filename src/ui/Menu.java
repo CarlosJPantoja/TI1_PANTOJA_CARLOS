@@ -52,13 +52,24 @@ public class Menu {
 				case 6:
 					option = importData();
 				break;
+				
+				case 7:
+					option = exportOrders();
+				break;
 			}
 		} while(option!=0);
 	}
 	
 	public String textManagement(){
-		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n4. List on screen\n5. Search customer\n6. Import data (from .csv)\n0. End the program";
+		String msg = "Management\n1. Add information\n2. Update information\n3. Update order status\n4. List on screen\n5. Search customer\n6. Import data (from .csv)\n7. Export orders\n0. End the program";
 		return msg;
+	}
+	
+	public int exportOrders() throws IOException {
+		String msg = typeString("\nType the file location to export");
+		String separator = typeString("\nType the separator of the file");
+		msg = management.exportOrders(msg, separator);
+		return -1;
 	}
 	
 	public int importData() throws IOException {

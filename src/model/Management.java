@@ -3,7 +3,9 @@ package model;
 import exceptions.*;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -335,6 +337,29 @@ public class Management {
 		}
 	}
 	
+	public String exportOrders(String file, String separator) throws IOException {
+		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+		String msg = "";
+		ArrayList<Order> newOrders = new ArrayList<Order>();
+		newOrders.add(orders.get(0));
+		for(int k=1; k<orders.size(); k++) {
+			Order test = orders.get(k);
+			int position = positionToExportOrders(test, newOrders);
+			newOrders.add(position, test);
+		}
+		bw.write("nit;name_restaurant;manager_restaurant;type_id_customer;id_customer;first_name;last_name;phone;address;date_order;code_order;name_product;code_product;description;cost;quantity;status".replaceAll(";", separator));
+		for(int i=0; i<newOrders.size(); i++) {
+			newOrders.get(i).getIdCustomer();
+			newOrders.get(i).getNitRestaurant();
+			for(int j=0; j<newOrders.get(i).getProducts().size(); j++) {
+				
+			}
+		}
+		
+		bw.close();
+		return msg;
+	}
+	
 	public void addOrder(String nit, String id, String code, String date, String product, int quantity, String status) {
 		Order test = new Order(code, date, id, nit, product, quantity, status);
 		orders.add(test);
@@ -370,5 +395,17 @@ public class Management {
 
 	public void setOrders(ArrayList<Order> orders) {
 		this.orders = orders;
+	}
+
+	private int positionToExportOrders(Order test, ArrayList<Order> newOrders) {
+		int position = 0;
+		Long complete1 = Long.parseLong(test.getNitRestaurant());
+		for(int i=0; i<newOrders.size(); i++) {
+			Long complete2 = Long.parseLong(newOrders.get(i).getNitRestaurant());;
+			if(complete1.compareTo(complete2) > 0) {
+				position++;
+			}
+		}
+		return position;
 	}
 }
