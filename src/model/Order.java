@@ -28,6 +28,33 @@ public class Order {
 		status = REQUESTED;
 	}
 	
+	public Order(String code, String date, String idCustomer, String nitRestaurant, String product, int quantity, String status) {
+		this.code = code;
+		String[] str = date.split("/");
+		long mls = ((Integer.parseInt(str[2])-1970)*365*24*3600*1000)+(Integer.parseInt(str[1])*30*24*3600*1000)+(Integer.parseInt(str[0])*24*3600*1000);
+		this.date = new Date(mls);
+		this.idCustomer = idCustomer;
+		this.nitRestaurant = nitRestaurant;
+		products = new ArrayList<String>();
+		products.add(product);
+		quantitys = new ArrayList<Integer>();
+		quantitys.add(quantity);
+		this.status = assingStatus(status);
+	}
+	
+	private int assingStatus(String status) {
+		if("requested".equalsIgnoreCase(status)) {
+			return 1;
+		} else if("in process".equalsIgnoreCase(status)) {
+			return 2;
+		} else if("sent".equalsIgnoreCase(status)) {
+			return 3;
+		} else if("delivered".equalsIgnoreCase(status)) {
+			return 4;
+		} 
+		return 0;
+	}
+
 	public String generateCode(String code) {
 		int ncode = Integer.parseInt(code);
 		ncode = ncode+1;
@@ -93,5 +120,13 @@ public class Order {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public void setOneProduct(String codeProduct) {
+		products.add(codeProduct);
+	}
+
+	public void setOneQuantity(int quantity) {
+		quantitys.add(quantity);
 	}
 }

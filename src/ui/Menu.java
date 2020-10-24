@@ -66,25 +66,30 @@ public class Menu {
 		do {
 			option = selectOption(textImportData(), 0, 4);
 			String msg = "";
+			String separator = "";
 			if(option!=0) {
 				msg = typeString("\nType the file location to import");
+				separator = typeString("\nType the separator of the file");
 			}
 			switch(option) {
 				case 1:
-					//importRestaurants();
+					msg = management.importRestaurants(msg, separator);
+					System.out.println(msg);
 				break;
 
 				case 2:
-					//importProducts();
+					msg = management.importProducts(msg, separator);
+					System.out.println(msg);
 				break;
 				
 				case 3:
-					msg = management.importCustomer(msg);
+					msg = management.importCustomer(msg, separator);
 					System.out.println(msg);
 				break;
 				
 				case 4:
-					//importOrders();
+					msg = management.importOrders(msg, separator);
+					System.out.println(msg);
 				break;
 			}
 		} while(option!=0);

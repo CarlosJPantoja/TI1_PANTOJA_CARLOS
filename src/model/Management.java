@@ -223,25 +223,121 @@ public class Management {
 		return msg;
 	}
 	
-	public String importCustomer(String fileName) throws IOException {
+	public String importCustomer(String fileName, String separator) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		String[] line = br.readLine().split(";");
-		String ln = "";
-		while(ln!=null) {
-			ln = br.readLine();
-			if(ln!=null) {
-				line = ln.split(";");
-				String name = line[0];
-				String lastName = line[1];
-				String idType = line[2];
-				String id = line[3];
-				Long phone = Long.parseLong(line[4]);
-				String address = line[5];
-				addCustomer(idType, id, name, lastName, phone, address);
+		String ln = br.readLine();
+		if(ln!=null) {
+			String[] line = ln.split(separator);
+			while(ln!=null) {
+				ln = br.readLine();
+				if(ln!=null) {
+					line = ln.split(separator);
+					String name = line[0];
+					String lastName = line[1];
+					String idType = line[2];
+					String id = line[3];
+					Long phone = Long.parseLong(line[4]);
+					String address = line[5];
+					addCustomer(idType, id, name, lastName, phone, address);
+				}
 			}
+			br.close();
+			return "\nData was imported successfully\n";
+		} else {
+			br.close();
+			return "\nFile is empty\n";
 		}
-		br.close();
-		return "\nData was imported successfully\n";
+	}
+	
+	public String importRestaurants(String fileName, String separator) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		String ln = br.readLine();
+		if(ln!=null) {
+			String[] line = ln.split(separator);
+			while(ln!=null) {
+				ln = br.readLine();
+				if(ln!=null) {
+					line = ln.split(separator);
+					String name = line[0];
+					String nit = line[1];
+					String manager = line[2];
+					addRestaurant(name, nit, manager);
+				}
+			}
+			br.close();
+			return "\nData was imported successfully\n";
+		} else {
+			br.close();
+			return "\nFile is empty\n";
+		}
+	}
+	
+	public String importProducts(String fileName, String separator) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		String ln = br.readLine();
+		if(ln!=null) {
+			String[] line = ln.split(separator);
+			while(ln!=null) {
+				ln = br.readLine();
+				if(ln!=null) {
+					line = ln.split(separator);
+					String code = line[0];
+					String name = line[1];
+					String description = line[2];
+					double cost = Double.parseDouble(line[3]);
+					String nitRestaurant = line[4];
+					addProduct(code, name, description, cost, nitRestaurant);
+				}
+			}
+			br.close();
+			return "\nData was imported successfully\n";
+		} else {
+			br.close();
+			return "\nFile is empty\n";
+		}
+	}
+	
+	public String importOrders(String fileName, String separator) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(fileName));
+		String codeProduct = "";
+		int quantity = 0;
+		String ln = br.readLine();
+		if(ln!=null) {
+			String[] line = ln.split(separator);
+			while(ln!=null) {
+				ln = br.readLine();
+				if(ln!=null) {
+					line = ln.split(separator);
+					int position = searchObject(line[10], orders);
+					if(position==-1) {
+						String nit = line[0];
+						String id = line[4];
+						String date = line[9];
+						String code = line[10];
+						codeProduct = line[12];
+						quantity = Integer.parseInt(line[15]);
+						String status = line[16];
+						addOrder(nit, id, code, date, codeProduct, quantity, status);
+						
+					} else {
+						codeProduct = line[12];
+						quantity = Integer.parseInt(line[15]);
+						orders.get(position).setOneProduct(codeProduct);
+						orders.get(position).setOneQuantity(quantity);
+					}
+				}
+			}
+			br.close();
+			return "\nData was imported successfully\n";
+		} else {
+			br.close();
+			return "\nFile is empty\n";
+		}
+	}
+	
+	public void addOrder(String nit, String id, String code, String date, String product, int quantity, String status) {
+		Order test = new Order(code, date, id, nit, product, quantity, status);
+		orders.add(test);
 	}
 
 	public ArrayList<Restaurant> getRestaurants() {
