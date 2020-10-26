@@ -1,4 +1,4 @@
-# delivery-system
+# Delivery system
 
 _This repository contains a Java project made in Eclipse which is a platform for registering and updating restaurant orders._
 
